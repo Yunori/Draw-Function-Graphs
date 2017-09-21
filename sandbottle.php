@@ -1,16 +1,11 @@
 <?php
-for($f = 1; isset($_POST['input'.$f]); $f++)
-	$input[$f-1] = $_POST['input'.$f];
+for($f = 0; isset($_POST["iarr"][0][$f]); $f++)
+	$input[$f] = $_POST["iarr"][0][$f];
 
-$param[0] = $_POST['zoom'];
-$param[1] = $_POST['start'];
-$param[2] = $_POST['end'];
-$param[3] = $_POST['xint'];
-$param[4] = $_POST['yint'];
-$param[5] = $_POST['pasx'];
-$param[6] = $_POST['decalx'];
-$param[7] = $_POST['decaly'];
 
+for($m = 0; isset($_POST["iarr"][1][$m]); $m++)
+	$param[$m] = $_POST["iarr"][1][$m];
+echo random_color();
 function fill($input, $param)
 {
 	echo '<svg width="500" height="500" id="graph">';
@@ -32,7 +27,7 @@ function fill($input, $param)
 				$z++;
 			}
 		}
-		draw($points, $i);
+		draw($points);
 		unset($points);
 	}
 	zero($param[6], $param[7]);
@@ -47,17 +42,24 @@ function zero($decalx, $decaly)
 	echo '<line y1="'.$lineposy.'" y2="'.$lineposy.'" x1="0" x2="500" style="stroke:rgba(180, 180, 180, 0.7);stroke-width:2" />';
 }
 
-function draw($points, $i)
+function random_color_part() {
+    return str_pad( dechex( mt_rand( 0, 255 ) ), 2, '0', STR_PAD_LEFT);
+}
+
+function random_color() {
+    return random_color_part() . random_color_part() . random_color_part();
+}
+
+function draw($points)
 {
-	$colors = array("red","blue","green","yellow");
 	echo '<polygon points="';
-	$firstx = explode(',', $points[0]);                                                                                                                                                  
-        echo $firstx[0] .',500 ';                                                                                                                                                      
-        for($z=0; isset($points[$z]); $z++)                                                                                                                                          
-                echo $points[$z].' ';                                                                                                                                         
-    $lastx = explode(',', $points[$z-1]);                                                                                                                                   
+	$firstx = explode(',', $points[0]);
+        echo $firstx[0] .',500 ';
+        for($z=0; isset($points[$z]); $z++)
+                echo $points[$z].' ';
+    $lastx = explode(',', $points[$z-1]);
     echo $lastx[0] .',500';
-	echo '" style="fill:'.$colors[$i].';stroke:black;stroke-width:1" />';
+	echo '" style="fill:#' . random_color() . ';stroke:black;stroke-width:1" />';
 }
 
 fill($input, $param);
